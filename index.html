@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-Ferreira - Calçados Femininos Exclusivos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .font-brand { font-family: 'Dancing Script', cursive; }
+        .font-content { font-family: 'Inter', sans-serif; }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #fce7f3 0%, #f9fafb 100%);
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #be185d 0%, #9d174d 100%);
+            transform: translateY(-2px);
+        }
+        
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(236, 72, 153, 0.1);
+        }
+        
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        
+        .cart-sidebar {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .cart-sidebar.active {
+            transform: translateX(0);
+        }
+        
+        .modal {
+            display: none;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .cart-badge {
+            background: #ec4899;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -8px;
+            right: -8px;
+        }
+        
+        .size-option {
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        
+        .size-option.selected {
+            border-color: #ec4899;
+            background-color: #fce7f3;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="font-content gradient-bg">
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <div class="flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            <span id="notification-text">Produto adicionado ao carrinho!</span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <div class="flex items-center cursor-pointer" onclick="showSection('home')">
+                    <h1 class="font-brand text-3xl md:text-4xl font-bold text-pink-600">T-Ferreira</h1>
+                    <span class="ml-2 text-xs text-gray-500 font-light">CALÇADOS FEMININOS</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#" onclick="showSection('home')" class="text-gray-700 hover:text-pink-600 font-medium transition-colors">Início</a>
+                    <a href="#" onclick="showSection('novidades')" class="text-gray-700 hover:text-pink-600 font-medium transition-colors">Novidades</a>
+                    <a href="#" onclick="showSection('sapatos')" class="text-gray-700 hover:text-pink-600 font-medium transition-colors">Sapatos</a>
+                    <a href="#" onclick="showSection('sandalias')" class="text-gray-700 hover:text-pink-600 font-medium transition-colors">Sandálias</a>
+                    <a href="#" onclick="showSection('botas')" class="text-gray-700 hover:text-pink-600 font-medium transition-colors">Botas</a>
+                    <a href="#" onclick="showSection('promocoes')" class="text-gray-700 hover:text-pink-600 font-medium transition-colors">Promoções</a>
+                    <a href="#" onclick="showSection('contato')" class="text-gray-700 hover:text-pink-600 font-medium transition-colors">Contato</a>
+                </nav>
+                
+                <!-- Cart and Mobile Menu -->
+                <div class="flex items-center space-x-4">
+                    <!-- Cart Button -->
+                    <button id="cart-btn" class="relative p-2 text-gray-700 hover:text-pink-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9m-9 0h9"></path>
+                        </svg>
+                        <span id="cart-count" class="cart-badge">0</span>
+                    </button>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="md:hidden p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu fixed inset-y-0 left-0 w-64 bg-white shadow-xl z-50 md:hidden">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="font-brand text-2xl font-bold text-pink-600">T-Ferreira</h2>
+                    <button id="close-menu" class="p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <nav class="space-y-4">
+                    <a href="#" onclick="showSection('home')" class="block text-gray-700 hover:text-pink-600 font-medium py-2">Início</a>
+                    <a href="#" onclick="showSection('novidades')" class="block text-gray-700 hover:text-pink-600 font-medium py-2">Novidades</a>
+                    <a href="#" onclick="showSection('sapatos')" class="block text-gray-700 hover:text-pink-600 font-medium py-2">Sapatos</a>
+                    <a href="#" onclick="showSection('sandalias')" class="block text-gray-700 hover:text-pink-600 font-medium py-2">Sandálias</a>
+                    <a href="#" onclick="showSection('botas')" class="block text-gray-700 hover:text-pink-600 font-medium py-2">Botas</a>
+                    <a href="#" onclick="showSection('promocoes')" class="block text-gray-700 hover:text-pink-600 font-medium py-2">Promoções</a>
+                    <a href="#" onclick="showSection('contato')" class="block text-gray-700 hover:text-pink-600 font-medium py-2">Contato</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="cart-sidebar fixed inset-y-0 right-0 w-96 bg-white shadow-xl z-50">
+        <div class="flex flex-col h-full">
+            <div class="flex justify-between items-center p-6 border-b">
+                <h3 class="text-xl font-semibold">Meu Carrinho</h3>
+                <button id="close-cart" class="p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="cart-items" class="flex-1 overflow-y-auto p-6">
+                <div class="text-center text-gray-500 py-8">
+                    <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9m-9 0h9"></path>
+                    </svg>
+                    <p>Seu carrinho está vazio</p>
+                </div>
+            </div>
+            
+            <div id="cart-footer" class="border-t p-6 bg-gray-50">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold">Total:</span>
+                    <span id="cart-total" class="text-2xl font-bold text-pink-600">R$ 0,00</span>
+                </div>
+                <button id="checkout-btn" class="w-full btn-primary text-white py-3 rounded-full font-semibold disabled:opacity-50" disabled>
+                    Finalizar Compra
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Home Section -->
+        <section id="home-section" class="section-content">
+            <!-- Hero Banner -->
+            <div class="relative h-screen flex items-center justify-center overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-pink-100 to-purple-50"></div>
+                <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+                    <h2 class="font-brand text-5xl md:text-7xl font-bold text-gray-800 mb-6">
+                        Elegância em Cada Passo
+                    </h2>
+                    <p class="text-xl md:text-2xl text-gray-600 mb-8 font-light">
+                        Descubra nossa coleção exclusiva de calçados femininos que combinam sofisticação e conforto
+                    </p>
+                    <button onclick="showSection('novidades')" class="btn-primary text-white px-8 py-4 rounded-full text-lg font-semibold shadow-lg">
+                        Ver Coleção
+                    </button>
+                </div>
+                
+                <!-- Decorative Elements -->
+                <div class="absolute top-20 left-10 w-20 h-20 bg-pink-200 rounded-full opacity-60 animate-pulse"></div>
+                <div class="absolute bottom-20 right-10 w-32 h-32 bg-purple-200 rounded-full opacity-40 animate-pulse"></div>
+            </div>
+
+            <!-- Featured Products -->
+            <div class="py-20 px-4">
+                <div class="max-w-7xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h3 class="font-brand text-4xl md:text-5xl font-bold text-gray-800 mb-4">Produtos em Destaque</h3>
+                        <p class="text-gray-600 text-lg">Os calçados mais desejados pelas nossas clientes</p>
+                    </div>
+                    
+                    <div id="featured-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Products will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonials -->
+            <div class="py-20 px-4 bg-gradient-to-r from-pink-50 to-purple-50">
+                <div class="max-w-6xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h3 class="font-brand text-4xl md:text-5xl font-bold text-gray-800 mb-4">O Que Nossas Clientes Dizem</h3>
+                        <p class="text-gray-600 text-lg">Depoimentos reais de mulheres que confiam na T-Ferreira</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="testimonial-card p-8 rounded-2xl">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-pink-200 rounded-full flex items-center justify-center">
+                                    <span class="text-pink-600 font-bold text-lg">M</span>
+                                </div>
+                                <div class="ml-4">
+                                    <h5 class="font-semibold text-gray-800">Maria Silva</h5>
+                                    <div class="flex text-yellow-400">★★★★★</div>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 italic">"Qualidade excepcional! Meus sapatos da T-Ferreira são os mais confortáveis que já tive. Recomendo para todas as amigas!"</p>
+                        </div>
+                        
+                        <div class="testimonial-card p-8 rounded-2xl">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-purple-200 rounded-full flex items-center justify-center">
+                                    <span class="text-purple-600 font-bold text-lg">A</span>
+                                </div>
+                                <div class="ml-4">
+                                    <h5 class="font-semibold text-gray-800">Ana Costa</h5>
+                                    <div class="flex text-yellow-400">★★★★★</div>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 italic">"Elegância e sofisticação em cada modelo. A T-Ferreira entende perfeitamente o que a mulher moderna precisa!"</p>
+                        </div>
+                        
+                        <div class="testimonial-card p-8 rounded-2xl">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-rose-200 rounded-full flex items-center justify-center">
+                                    <span class="text-rose-600 font-bold text-lg">C</span>
+                                </div>
+                                <div class="ml-4">
+                                    <h5 class="font-semibold text-gray-800">Carla Santos</h5>
+                                    <div class="flex text-yellow-400">★★★★★</div>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 italic">"Atendimento impecável e produtos de altíssima qualidade. Já sou cliente há 3 anos e sempre me surpreendo!"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="py-16 px-4 bg-gradient-to-r from-pink-600 to-purple-600">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h3 class="font-brand text-3xl md:text-4xl font-bold text-white mb-4">
+                        Fique por Dentro das Novidades
+                    </h3>
+                    <p class="text-pink-100 text-lg mb-8">
+                        Receba em primeira mão nossos lançamentos e promoções exclusivas
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                        <input 
+                            id="newsletter-email"
+                            type="email" 
+                            placeholder="Seu melhor e-mail"
+                            class="flex-1 px-6 py-3 rounded-full border-0 focus:outline-none focus:ring-2 focus:ring-white"
+                        >
+                        <button id="newsletter-btn" class="bg-white text-pink-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                            Cadastrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Sections -->
+        <section id="novidades-section" class="section-content hidden">
+            <div class="py-20 px-4">
+                <div class="max-w-7xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h2 class="font-brand text-4xl md:text-5xl font-bold text-gray-800 mb-4">Novidades</h2>
+                        <p class="text-gray-600 text-lg">Os lançamentos mais recentes da nossa coleção</p>
+                    </div>
+                    <div id="novidades-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                        <!-- Products will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sapatos-section" class="section-content hidden">
+            <div class="py-20 px-4">
+                <div class="max-w-7xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h2 class="font-brand text-4xl md:text-5xl font-bold text-gray-800 mb-4">Sapatos</h2>
+                        <p class="text-gray-600 text-lg">Elegância e sofisticação para todas as ocasiões</p>
+                    </div>
+                    <div id="sapatos-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                        <!-- Products will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sandalias-section" class="section-content hidden">
+            <div class="py-20 px-4">
+                <div class="max-w-7xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h2 class="font-brand text-4xl md:text-5xl font-bold text-gray-800 mb-4">Sandálias</h2>
+                        <p class="text-gray-600 text-lg">Conforto e estilo para os dias mais quentes</p>
+                    </div>
+                    <div id="sandalias-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                        <!-- Products will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="botas-section" class="section-content hidden">
+            <div class="py-20 px-4">
+                <div class="max-w-7xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h2 class="font-brand text-4xl md:text-5xl font-bold text-gray-800 mb-4">Botas</h2>
+                        <p class="text-gray-600 text-lg">Proteção e estilo para todas as estações</p>
+                    </div>
+                    <div id="botas-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                        <!-- Products will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="promocoes-section" class="section-content hidden">
+            <div class="py-20 px-4">
+                <div class="max-w-7xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h2 class="font-brand text-4xl md:text-5xl font-bold text-gray-800 mb-4">Promoções</h2>
+                        <p class="text-gray-600 text-lg">Ofertas especiais que você não pode perder</p>
+                    </div>
+                    <div id="promocoes-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                        <!-- Products will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contato-section" class="section-content hidden">
+            <div class="py-20 px-4">
+                <div class="max-w-4xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h2 class="font-brand text-4xl md:text-5xl font-bold text-gray-800 mb-4">Entre em Contato</h2>
+                        <p class="text-gray-600 text-lg">Estamos aqui para ajudar você a encontrar o calçado perfeito</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <!-- Contact Info -->
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-6">Informações de Contato</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mr-4">
+                                        <span class="text-pink-600">📍</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold">Endereço</p>
+                                        <p class="text-gray-600">Rua das Flores, 123 - Centro<br>São Paulo, SP - CEP: 01234-567</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mr-4">
+                                        <span class="text-pink-600">📞</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold">Telefone</p>
+                                        <p class="text-gray-600">(11) 9999-9999</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mr-4">
+                                        <span class="text-pink-600">✉️</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold">E-mail</p>
+                                        <p class="text-gray-600">contato@t-ferreira.com</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mr-4">
+                                        <span class="text-pink-600">🕒</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold">Horário de Funcionamento</p>
+                                        <p class="text-gray-600">Segunda a Sexta: 9h às 18h<br>Sábado: 9h às 16h</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Contact Form -->
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-6">Envie uma Mensagem</h3>
+                            <form id="contact-form" class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Nome</label>
+                                    <input type="text" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">E-mail</label>
+                                    <input type="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Assunto</label>
+                                    <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500">
+                                        <option>Dúvidas sobre produtos</option>
+                                        <option>Trocas e devoluções</option>
+                                        <option>Sugestões</option>
+                                        <option>Outros</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Mensagem</label>
+                                    <textarea rows="4" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"></textarea>
+                                </div>
+                                
+                                <button type="submit" class="w-full btn-primary text-white py-3 rounded-lg font-semibold">
+                                    Enviar Mensagem
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50">
+        <div class="bg-white rounded-2xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="p-8">
+                <div class="flex justify-between items-start mb-6">
+                    <h3 id="modal-title" class="text-2xl font-bold text-gray-800"></h3>
+                    <button id="close-modal" class="p-2 hover:bg-gray-100 rounded-full">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Product Image -->
+                    <div class="aspect-square bg-gradient-to-br from-pink-50 to-purple-50 rounded-2xl flex items-center justify-center">
+                        <div id="modal-image" class="w-48 h-48 text-pink-400">
+                            <!-- SVG will be inserted here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Product Details -->
+                    <div>
+                        <p id="modal-description" class="text-gray-600 mb-6"></p>
+                        
+                        <div class="mb-6">
+                            <span class="text-3xl font-bold text-pink-600" id="modal-price"></span>
+                            <span id="modal-old-price" class="text-lg text-gray-400 line-through ml-2"></span>
+                        </div>
+                        
+                        <!-- Size Selection -->
+                        <div class="mb-6">
+                            <h4 class="font-semibold mb-3">Tamanho:</h4>
+                            <div id="size-options" class="grid grid-cols-4 gap-2">
+                                <!-- Size options will be inserted here -->
+                            </div>
+                        </div>
+                        
+                        <!-- Color Selection -->
+                        <div class="mb-6">
+                            <h4 class="font-semibold mb-3">Cor:</h4>
+                            <div id="color-options" class="flex space-x-2">
+                                <!-- Color options will be inserted here -->
+                            </div>
+                        </div>
+                        
+                        <!-- Quantity -->
+                        <div class="mb-8">
+                            <h4 class="font-semibold mb-3">Quantidade:</h4>
+                            <div class="flex items-center space-x-4">
+                                <button id="qty-minus" class="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-100">-</button>
+                                <span id="quantity" class="text-xl font-semibold">1</span>
+                                <button id="qty-plus" class="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-100">+</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Add to Cart Button -->
+                        <button id="add-to-cart-modal" class="w-full btn-primary text-white py-4 rounded-full text-lg font-semibold mb-4">
+                            Adicionar ao Carrinho
+                        </button>
+                        
+                        <!-- Product Info -->
+                        <div class="text-sm text-gray-600 space-y-2">
+                            <p>✓ Frete grátis para compras acima de R$ 199</p>
+                            <p>✓ Troca grátis em até 30 dias</p>
+                            <p>✓ Garantia de qualidade T-Ferreira</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-16 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Brand -->
+                <div class="col-span-1 md:col-span-2">
+                    <h4 class="font-brand text-3xl font-bold text-pink-400 mb-4">T-Ferreira</h4>
+                    <p class="text-gray-300 mb-6 max-w-md">
+                        Há mais de 10 anos oferecendo calçados femininos de alta qualidade, 
+                        combinando elegância, conforto e sofisticação para a mulher moderna.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center hover:bg-pink-700 transition-colors">
+                            <span class="text-sm font-bold">f</span>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center hover:bg-pink-700 transition-colors">
+                            <span class="text-sm font-bold">@</span>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center hover:bg-pink-700 transition-colors">
+                            <span class="text-sm font-bold">in</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Links -->
+                <div>
+                    <h5 class="font-semibold text-lg mb-4">Categorias</h5>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" onclick="showSection('sapatos')" class="hover:text-pink-400 transition-colors">Sapatos</a></li>
+                        <li><a href="#" onclick="showSection('sandalias')" class="hover:text-pink-400 transition-colors">Sandálias</a></li>
+                        <li><a href="#" onclick="showSection('botas')" class="hover:text-pink-400 transition-colors">Botas</a></li>
+                        <li><a href="#" onclick="showSection('promocoes')" class="hover:text-pink-400 transition-colors">Promoções</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h5 class="font-semibold text-lg mb-4">Contato</h5>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>📍 Rua das Flores, 123</li>
+                        <li>📞 (11) 9999-9999</li>
+                        <li>✉️ contato@t-ferreira.com</li>
+                        <li>🕒 Seg-Sex: 9h às 18h</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 T-Ferreira. Todos os direitos reservados. Desenvolvido com ❤️ para mulheres elegantes.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Product Database
+        const products = {
+            featured: [
+                { id: 1, name: 'Scarpin Clássico Rosa', price: 299.90, category: 'sapatos', image: 'scarpin', description: 'Elegância atemporal para todas as ocasiões', featured: true },
+                { id: 2, name: 'Sandália Delicada', price: 189.90, category: 'sandalias', image: 'sandalia', description: 'Conforto e sofisticação para o verão', featured: true },
+                { id: 3, name: 'Bota Elegante', price: 399.90, category: 'botas', image: 'bota', description: 'Estilo e proteção para os dias frios', featured: true }
+            ],
+            novidades: [
+                { id: 4, name: 'Scarpin Nude Premium', price: 349.90, category: 'sapatos', image: 'scarpin', description: 'Novo modelo com acabamento premium', isNew: true },
+                { id: 5, name: 'Sandália Tiras Douradas', price: 229.90, category: 'sandalias', image: 'sandalia', description: 'Detalhes dourados para um toque especial', isNew: true },
+                { id: 6, name: 'Ankle Boot Moderna', price: 449.90, category: 'botas', image: 'bota', description: 'Design moderno e contemporâneo', isNew: true },
+                { id: 7, name: 'Sapatilha Confort', price: 159.90, category: 'sapatos', image: 'scarpin', description: 'Máximo conforto para o dia a dia', isNew: true }
+            ],
+            sapatos: [
+                { id: 1, name: 'Scarpin Clássico Rosa', price: 299.90, category: 'sapatos', image: 'scarpin', description: 'Elegância atemporal para todas as ocasiões' },
+                { id: 4, name: 'Scarpin Nude Premium', price: 349.90, category: 'sapatos', image: 'scarpin', description: 'Novo modelo com acabamento premium' },
+                { id: 7, name: 'Sapatilha Confort', price: 159.90, category: 'sapatos', image: 'scarpin', description: 'Máximo conforto para o dia a dia' },
+                { id: 8, name: 'Oxford Feminino', price: 279.90, category: 'sapatos', image: 'scarpin', description: 'Estilo masculino com toque feminino' },
+                { id: 9, name: 'Mocassim Luxo', price: 319.90, category: 'sapatos', image: 'scarpin', description: 'Sofisticação e conforto em um só produto' },
+                { id: 10, name: 'Scarpin Verniz', price: 289.90, category: 'sapatos', image: 'scarpin', description: 'Brilho e elegância para ocasiões especiais' }
+            ],
+            sandalias: [
+                { id: 2, name: 'Sandália Delicada', price: 189.90, category: 'sandalias', image: 'sandalia', description: 'Conforto e sofisticação para o verão' },
+                { id: 5, name: 'Sandália Tiras Douradas', price: 229.90, category: 'sandalias', image: 'sandalia', description: 'Detalhes dourados para um toque especial' },
+                { id: 11, name: 'Rasteirinha Chic', price: 129.90, category: 'sandalias', image: 'sandalia', description: 'Simplicidade e elegância' },
+                { id: 12, name: 'Sandália Plataforma', price: 259.90, category: 'sandalias', image: 'sandalia', description: 'Altura e conforto em perfeita harmonia' },
+                { id: 13, name: 'Papete Premium', price: 179.90, category: 'sandalias', image: 'sandalia', description: 'Casual chic para todos os momentos' },
+                { id: 14, name: 'Sandália Festa', price: 299.90, category: 'sandalias', image: 'sandalia', description: 'Brilho e glamour para suas festas' }
+            ],
+            botas: [
+                { id: 3, name: 'Bota Elegante', price: 399.90, category: 'botas', image: 'bota', description: 'Estilo e proteção para os dias frios' },
+                { id: 6, name: 'Ankle Boot Moderna', price: 449.90, category: 'botas', image: 'bota', description: 'Design moderno e contemporâneo' },
+                { id: 15, name: 'Coturno Fashion', price: 359.90, category: 'botas', image: 'bota', description: 'Atitude e personalidade' },
+                { id: 16, name: 'Bota Montaria', price: 479.90, category: 'botas', image: 'bota', description: 'Elegância clássica e atemporal' },
+                { id: 17, name: 'Chelsea Boot', price: 389.90, category: 'botas', image: 'bota', description: 'Praticidade e estilo britânico' },
+                { id: 18, name: 'Bota Over Knee', price: 529.90, category: 'botas', image: 'bota', description: 'Sensualidade e sofisticação' }
+            ],
+            promocoes: [
+                { id: 19, name: 'Scarpin Outlet', price: 149.90, oldPrice: 299.90, category: 'sapatos', image: 'scarpin', description: 'Oportunidade única com 50% de desconto', onSale: true },
+                { id: 20, name: 'Sandália Promoção', price: 99.90, oldPrice: 189.90, category: 'sandalias', image: 'sandalia', description: 'Liquidação de verão', onSale: true },
+                { id: 21, name: 'Bota Desconto', price: 199.90, oldPrice: 399.90, category: 'botas', image: 'bota', description: 'Última peça com super desconto', onSale: true },
+                { id: 22, name: 'Kit 2 Sapatilhas', price: 249.90, oldPrice: 319.80, category: 'sapatos', image: 'scarpin', description: 'Leve 2 e pague menos', onSale: true }
+            ]
+        };
+
+        // Cart functionality
+        let cart = [];
+        let currentProduct = null;
+        let selectedSize = null;
+        let selectedColor = null;
+        let quantity = 1;
+
+        // SVG Icons for products
+        const productIcons = {
+            scarpin: `<svg fill="currentColor" viewBox="0 0 24 24" class="w-full h-full">
+                <path d="M2 18h20l-2-12H4l-2 12zM12 4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+            </svg>`,
+            sandalia: `<svg fill="currentColor" viewBox="0 0 24 24" class="w-full h-full">
+                <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zM4 18v-6h16v6H4z"/>
+            </svg>`,
+            bota: `<svg fill="currentColor" viewBox="0 0 24 24" class="w-full h-full">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>`
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProducts();
+            setupEventListeners();
+            showSection('home');
+        });
+
+        // Load products into sections
+        function loadProducts() {
+            // Load featured products
+            const featuredContainer = document.getElementById('featured-products');
+            featuredContainer.innerHTML = products.featured.map(product => createProductCard(product)).join('');
+
+            // Load products for each category
+            Object.keys(products).forEach(category => {
+                if (category !== 'featured') {
+                    const container = document.getElementById(`${category}-products`);
+                    if (container) {
+                        container.innerHTML = products[category].map(product => createProductCard(product)).join('');
+                    }
+                }
+            });
+        }
+
+        // Create product card HTML
+        function createProductCard(product) {
+            const badge = product.isNew ? '<span class="absolute top-4 left-4 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">NOVO</span>' :
+                         product.onSale ? '<span class="absolute top-4 left-4 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-semibold">PROMOÇÃO</span>' : '';
+            
+            const oldPrice = product.oldPrice ? `<span class="text-lg text-gray-400 line-through ml-2">R$ ${product.oldPrice.toFixed(2).replace('.', ',')}</span>` : '';
+
+            return `
+                <div class="product-card hover-lift relative">
+                    ${badge}
+                    <div class="h-80 bg-gradient-to-br from-pink-50 to-purple-50 flex items-center justify-center">
+                        <div class="w-32 h-32 text-pink-400">
+                            ${productIcons[product.image]}
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-semibold text-xl text-gray-800 mb-2">${product.name}</h4>
+                        <p class="text-gray-600 mb-4">${product.description}</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-2xl font-bold text-pink-600">R$ ${product.price.toFixed(2).replace('.', ',')}</span>
+                                ${oldPrice}
+                            </div>
+                            <button onclick="openProductModal(${product.id})" class="btn-primary text-white px-6 py-2 rounded-full font-medium">
+                                Ver Detalhes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Mobile menu
+            document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.add('active');
+            });
+
+            document.getElementById('close-menu').addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.remove('active');
+            });
+
+            // Cart sidebar
+            document.getElementById('cart-btn').addEventListener('click', () => {
+                document.getElementById('cart-sidebar').classList.add('active');
+            });
+
+            document.getElementById('close-cart').addEventListener('click', () => {
+                document.getElementById('cart-sidebar').classList.remove('active');
+            });
+
+            // Product modal
+            document.getElementById('close-modal').addEventListener('click', closeProductModal);
+
+            // Modal quantity controls
+            document.getElementById('qty-minus').addEventListener('click', () => {
+                if (quantity > 1) {
+                    quantity--;
+                    document.getElementById('quantity').textContent = quantity;
+                }
+            });
+
+            document.getElementById('qty-plus').addEventListener('click', () => {
+                quantity++;
+                document.getElementById('quantity').textContent = quantity;
+            });
+
+            // Add to cart from modal
+            document.getElementById('add-to-cart-modal').addEventListener('click', addToCartFromModal);
+
+            // Newsletter
+            document.getElementById('newsletter-btn').addEventListener('click', subscribeNewsletter);
+
+            // Contact form
+            document.getElementById('contact-form').addEventListener('submit', submitContactForm);
+
+            // Checkout
+            document.getElementById('checkout-btn').addEventListener('click', checkout);
+
+            // Close modals when clicking outside
+            document.addEventListener('click', (e) => {
+                const mobileMenu = document.getElementById('mobile-menu');
+                const cartSidebar = document.getElementById('cart-sidebar');
+                const productModal = document.getElementById('product-modal');
+
+                if (!mobileMenu.contains(e.target) && !document.getElementById('mobile-menu-btn').contains(e.target)) {
+                    mobileMenu.classList.remove('active');
+                }
+
+                if (!cartSidebar.contains(e.target) && !document.getElementById('cart-btn').contains(e.target)) {
+                    cartSidebar.classList.remove('active');
+                }
+
+                if (e.target === productModal) {
+                    closeProductModal();
+                }
+            });
+        }
+
+        // Show section
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Show selected section
+            document.getElementById(`${sectionName}-section`).classList.remove('hidden');
+
+            // Close mobile menu
+            document.getElementById('mobile-menu').classList.remove('active');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Find product by ID
+        function findProductById(id) {
+            for (const category in products) {
+                const product = products[category].find(p => p.id === id);
+                if (product) return product;
+            }
+            return null;
+        }
+
+        // Open product modal
+        function openProductModal(productId) {
+            currentProduct = findProductById(productId);
+            if (!currentProduct) return;
+
+            // Reset modal state
+            selectedSize = null;
+            selectedColor = null;
+            quantity = 1;
+
+            // Update modal content
+            document.getElementById('modal-title').textContent = currentProduct.name;
+            document.getElementById('modal-description').textContent = currentProduct.description;
+            document.getElementById('modal-price').textContent = `R$ ${currentProduct.price.toFixed(2).replace('.', ',')}`;
+            document.getElementById('modal-old-price').textContent = currentProduct.oldPrice ? `R$ ${currentProduct.oldPrice.toFixed(2).replace('.', ',')}` : '';
+            document.getElementById('modal-image').innerHTML = productIcons[currentProduct.image];
+            document.getElementById('quantity').textContent = quantity;
+
+            // Setup size options
+            const sizeOptions = document.getElementById('size-options');
+            const sizes = ['34', '35', '36', '37', '38', '39', '40', '41'];
+            sizeOptions.innerHTML = sizes.map(size => 
+                `<button class="size-option p-3 rounded-lg text-center font-semibold" onclick="selectSize('${size}')">${size}</button>`
+            ).join('');
+
+            // Setup color options
+            const colorOptions = document.getElementById('color-options');
+            const colors = [
+                { name: 'Rosa', color: '#ec4899' },
+                { name: 'Preto', color: '#000000' },
+                { name: 'Nude', color: '#d4a574' },
+                { name: 'Branco', color: '#ffffff' }
+            ];
+            colorOptions.innerHTML = colors.map(color => 
+                `<button class="w-8 h-8 rounded-full border-2 border-gray-300" style="background-color: ${color.color}" onclick="selectColor('${color.name}')" title="${color.name}"></button>`
+            ).join('');
+
+            // Show modal
+            document.getElementById('product-modal').classList.add('active');
+        }
+
+        // Close product modal
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.remove('active');
+            currentProduct = null;
+            selectedSize = null;
+            selectedColor = null;
+            quantity = 1;
+        }
+
+        // Select size
+        function selectSize(size) {
+            selectedSize = size;
+            document.querySelectorAll('.size-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+        }
+
+        // Select color
+        function selectColor(color) {
+            selectedColor = color;
+            document.querySelectorAll('#color-options button').forEach(option => {
+                option.classList.remove('ring-2', 'ring-pink-500');
+            });
+            event.target.classList.add('ring-2', 'ring-pink-500');
+        }
+
+        // Add to cart from modal
+        function addToCartFromModal() {
+            if (!currentProduct) return;
+
+            if (!selectedSize) {
+                alert('Por favor, selecione um tamanho.');
+                return;
+            }
+
+            if (!selectedColor) {
+                alert('Por favor, selecione uma cor.');
+                return;
+            }
+
+            const cartItem = {
+                id: Date.now(), // Unique cart item ID
+                productId: currentProduct.id,
+                name: currentProduct.name,
+                price: currentProduct.price,
+                size: selectedSize,
+                color: selectedColor,
+                quantity: quantity,
+                image: currentProduct.image
+            };
+
+            cart.push(cartItem);
+            updateCartUI();
+            showNotification(`${currentProduct.name} adicionado ao carrinho!`);
+            closeProductModal();
+        }
+
+        // Update cart UI
+        function updateCartUI() {
+            const cartCount = document.getElementById('cart-count');
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            const checkoutBtn = document.getElementById('checkout-btn');
+
+            // Update cart count
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+
+            // Update cart items
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9m-9 0h9"></path>
+                        </svg>
+                        <p>Seu carrinho está vazio</p>
+                    </div>
+                `;
+                checkoutBtn.disabled = true;
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="flex items-center space-x-4 py-4 border-b">
+                        <div class="w-16 h-16 bg-gradient-to-br from-pink-50 to-purple-50 rounded-lg flex items-center justify-center">
+                            <div class="w-8 h-8 text-pink-400">
+                                ${productIcons[item.image]}
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold">${item.name}</h4>
+                            <p class="text-sm text-gray-600">Tamanho: ${item.size} | Cor: ${item.color}</p>
+                            <p class="text-sm text-gray-600">Qtd: ${item.quantity}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-semibold text-pink-600">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</p>
+                            <button onclick="removeFromCart(${item.id})" class="text-red-500 text-sm hover:underline">Remover</button>
+                        </div>
+                    </div>
+                `).join('');
+                checkoutBtn.disabled = false;
+            }
+
+            // Update total
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartTotal.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        // Remove from cart
+        function removeFromCart(cartItemId) {
+            cart = cart.filter(item => item.id !== cartItemId);
+            updateCartUI();
+            showNotification('Produto removido do carrinho!');
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notification-text');
+            
+            notificationText.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Subscribe to newsletter
+        function subscribeNewsletter() {
+            const email = document.getElementById('newsletter-email').value.trim();
+            
+            if (email && email.includes('@')) {
+                showNotification('Obrigada por se cadastrar! Em breve você receberá nossas novidades.');
+                document.getElementById('newsletter-email').value = '';
+            } else {
+                alert('Por favor, insira um e-mail válido.');
+            }
+        }
+
+        // Submit contact form
+        function submitContactForm(e) {
+            e.preventDefault();
+            showNotification('Mensagem enviada com sucesso! Entraremos em contato em breve.');
+            e.target.reset();
+        }
+
+        // Checkout
+        function checkout() {
+            if (cart.length === 0) return;
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+            alert(`Finalizando compra:\n\n${itemCount} item(s)\nTotal: R$ ${total.toFixed(2).replace('.', ',')}\n\nRedirecionando para o pagamento...`);
+            
+            // Clear cart after checkout
+            cart = [];
+            updateCartUI();
+            document.getElementById('cart-sidebar').classList.remove('active');
+            showNotification('Pedido realizado com sucesso!');
+        }
+
+        // Add scroll effect to header
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.classList.add('shadow-lg');
+            } else {
+                header.classList.remove('shadow-lg');
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9746eb4c94d85023',t:'MTc1NjA4MTE3OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
